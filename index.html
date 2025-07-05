@@ -18,7 +18,7 @@
         /* Product image adjusted for larger screens */
         .product-card img {
             height: auto;
-            max-height: 250px;
+            max-height: 200px;
             width: 100%;
             object-fit: contain;
         }
@@ -29,12 +29,7 @@
             transition: 0.25s ease;
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
         }
-
-        /* Active filter button */
-        .filter-btn.active {
-            background-color: #198754 !important;
-            color: #fff !important;
-        }
+       
 
         /* Gradient hero banner overlay */
         .hero-gradient {
@@ -42,17 +37,20 @@
             background: linear-gradient(135deg, rgba(13, 110, 253, 1) 0%, rgba(32, 201, 151, 1) 100%);
         }
 
-        @media screen and (max-width: 576px) {
-            .filter-text {
-                font-size: 1rem;
+        @media screen and (max-width: 768px) {
+           
+            .cart-btn{
+                font-size: 0.5rem;
             }
 
-            .product-card:hover {
-                font-size: 1rem;
-                transform: translateY(-4px);
-                transition: 0.25s ease;
-                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+          
+        }
+          @media screen and (min-width: 768px) {
+            
+            .cart-btn{
+                font-size: 0.8rem;
             }
+
         }
     </style>
 </head>
@@ -102,12 +100,16 @@
         </div>
 
         <!-- Filter Buttons -->
-        <div class="d-flex justify-content-center  filter-text flex-wrap gap-2 mb-4" id="filterButtons">
-            <button class="btn btn-outline-success filter-btn active" data-filter="all">All</button>
-            <button class="btn btn-outline-success filter-btn" data-filter="smartphones">Smartphones</button>
-            <button class="btn btn-outline-success filter-btn" data-filter="mobile-accessories">Mobile
-                Accessories</button>
+        <div class="row justify-content-center mb-4">
+            <div class="col-12 col-md-6">
+                <select id="filterSelect" class="form-select shadow-sm">
+                    <option value="all" selected>All products</option>
+                    <option value="smartphones">Smartphones</option>
+                    <option value="mobile-accessories">Mobile Accessories</option>
+                </select>
+            </div>
         </div>
+
 
         <!-- Product Count -->
         <p class="text-center fw-bold" id="productCount"></p>
@@ -121,11 +123,11 @@
         <div class="container bg-gradient">
             <h2 class="text-center mb-4 text-secondary fw-bold">About Us</h2>
             <div class="row align-items-center">
-                <div class="col-md-6 mb-4 mb-md-0">
+                <div class="col-md-12 col-lg-6 mb-4 mb-md-0 gap-2 ">
                     <img src="https://img.freepik.com/premium-photo/abstract-background-electronic-circuit-board-technological-orange-red-generative-ai_807028-57.jpg?w=2000"
-                        alt="About Image" class="img-fluid rounded-4 shadow-lg p-2">
+                        alt="About Image" class="img-fluid rounded-4 align-items-lg-stretch shadow-lg p-2">
                 </div>
-                <div class="col-md-6 rounded shadow-lg p-2">
+                <div class="col-md-12 col-lg-6 rounded shadow-lg p-2 gap-2">
                     <p class="lead text-muted">
                         At <strong>Electronic Shop</strong>, we’re passionate about bringing the latest technology to
                         your fingertips.
@@ -137,9 +139,7 @@
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam, consequatur! Atque iure
                         perspiciatis consequatur alias, fuga dolorum eos, tenetur consequuntur deleniti iusto, molestias
                         eaque sunt.
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Explicabo eius hic ratione asperiores
-                        ducimus nostrum voluptatum commodi molestias magnam. Vitae provident magnam porro ex odio iste
-                        molestias recusandae.
+                        
                     </p>
                     <p class="fw-semibold text-success">
                         Trusted by thousands of customers since 2025.
@@ -279,7 +279,7 @@
 
                 filtered.forEach(p => {
                     const col = document.createElement('div');
-                    col.className = 'col-6 col-md-6 col-lg-3';
+                    col.className = 'col-6 col-md-4 col-lg-3';
                     col.innerHTML = `
                     <div class="card product-card h-100 border-0 shadow-sm">
                         <img src="${p.thumbnail}" class="card-img-top" alt="${p.title}">
@@ -288,9 +288,9 @@
                             <p class="text-success fw-semibold mb-1">$${parseFloat(p.price).toFixed(2)}</p>
                             <p class="small text-muted flex-grow-1">${p.description.substring(0, 60)}...</p>
                                  <div class="d-flex gap-2 mt-auto">
-                                    <button class="btn btn-outline-success btn-sm w-50">Add to Cart</button>
+                                    <button class="btn btn-outline-success fs-12 cart-btn btn-sm w-50">Add to Cart</button>
                                     
-                                    <a href="product-detail.html?id=${p.id}" class="btn btn-outline-primary btn-sm w-50">Details</a>
+                                    <a href="product-detail.html?id=${p.id}" class="btn btn-outline-primary btn-sm w-50 align-content-center">Details</a>
                              </div>
                         </div>
                     </div>`;
@@ -299,13 +299,11 @@
             }
 
             // Filter handling
-            filterButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    filterButtons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentFilter = btn.dataset.filter;
-                    displayProducts();
-                });
+            const filterSelect = document.getElementById('filterSelect');
+
+            filterSelect.addEventListener('change', () => {
+                currentFilter = filterSelect.value;
+                displayProducts();
             });
 
             // Live search
